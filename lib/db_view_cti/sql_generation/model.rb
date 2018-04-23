@@ -18,7 +18,6 @@ module DBViewCTI
                   "ON #{DBViewCTI::Names.table_name(klass)}.#{DBViewCTI::Names.foreign_key(base_class)} = " +
                   "#{DBViewCTI::Names.table_name(base_class)}.id"
           prev_base_class = base_class
-          base_class = klass
           levels[DBViewCTI::Names.foreign_key(klass)] = level
           level += 1
           descendants.each(&block) 
@@ -37,11 +36,11 @@ module DBViewCTI
         if @cti_inner_join_query && @cti_inner_join_query[target_class]
           return @cti_inner_join_query[target_class] + "#{id if id}"
         end
-        return nil if !@cti_ascendants.include?(target_class)
-        query = "SELECT #{DBViewCTI::Names.table_name(target_class)}.id AS #{DBViewCTI::Names.foreign_key(target_class)}" +
+        @cti_ascendants ||= []
+        return if !@cti_ascendants.include?(target_class)
+        query = "SELECT #{target_class.cti_part_table}.id AS #{DBViewCTI::Names.foreign_key(target_class)}" +
                 "\nFROM #{DBViewCTI::Names.table_name(self)}"
         base_class = self
-        @cti_ascendants ||= []
         @cti_ascendants.reverse.each do |ascendant|
           query += "\nINNER JOIN #{DBViewCTI::Names.table_name(ascendant)} " +
                    "ON #{DBViewCTI::Names.table_name(base_class)}.#{DBViewCTI::Names.foreign_key(ascendant)} = " +
