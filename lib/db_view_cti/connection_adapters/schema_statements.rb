@@ -3,13 +3,13 @@ module DBViewCTI
     module SchemaStatements
 
       def cti_create_view(class_name, options = {})
-        generator = DBViewCTI::SQLGeneration::Migration::Factory.generator(class_name)
+        generator = DBViewCTI::SQLGeneration::Migration::Factory.generator(class_name, options)
         cti_execute_sql(generator.create_view_sql)
         cti_execute_sql(generator.create_trigger_sql)
       end
 
       def cti_drop_view(class_name, options = {})
-        generator = DBViewCTI::SQLGeneration::Migration::Factory.generator(class_name)
+        generator = DBViewCTI::SQLGeneration::Migration::Factory.generator(class_name, options)
         cti_execute_sql(generator.drop_trigger_sql)
         cti_execute_sql(generator.drop_view_sql)
       end
