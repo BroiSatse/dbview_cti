@@ -6,6 +6,8 @@ module DBViewCTI
 
         module ClassMethods
           
+          attr_reader :cti_part_table
+
           def cti_base_class?
             !!@cti_base_class
           end

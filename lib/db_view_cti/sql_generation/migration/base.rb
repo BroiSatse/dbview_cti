@@ -8,7 +8,7 @@ module DBViewCTI
           @derived_class = class_name.constantize
           @base_class    = @derived_class.superclass
           @base_class_table    = @base_class.table_name
-          @derived_class_table = options[:table] || DBViewCTI::Names.table_name(@derived_class)
+          @derived_class_table = @derived_class.cti_part_table
           # we assume the foreign key is in the derived class
           @base_class_key = 'id'
           @derived_class_key = DBViewCTI::Names.foreign_key(@base_class)
